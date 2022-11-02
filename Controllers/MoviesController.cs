@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -65,6 +66,22 @@ namespace MovieAPI.Controllers
             }
             int index = random.Next(title.Count);
             return title[index];
+        }
+
+        [HttpGet("GetRandomByUserQuanity")]
+        public async Task<ActionResult<IEnumerable<String>>> GetRandomByUserQuanity(int userAmount)
+        {
+            Random random = new Random();
+            List<string> randomMovies = new List<string>();
+            List<Movie> movies = _context.Movies.ToList();
+
+            for (int i = 0; i < userAmount; i++)
+            {
+                int index = random.Next(movies.Count);
+                randomMovies.Add(movies[index].Title);
+            }
+
+            return randomMovies;
         }
 
         //GET: api/Movies/5

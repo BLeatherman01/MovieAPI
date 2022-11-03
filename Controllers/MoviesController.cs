@@ -24,7 +24,22 @@ namespace MovieAPI.Controllers
         {
             return await _context.Movies.ToListAsync();
         }
-        
+        //Get all Genres
+        [HttpGet("GetGenres")]
+        public async Task<ActionResult<IEnumerable<String>>> GetGenres()
+        {
+            List<string> categories = new List<string>();
+            List<Movie> movie = _context.Movies.ToList();
+            foreach(Movie genre in movie)
+            {
+                if (!categories.Contains(genre.Genre))
+                {
+                    categories.Add(genre.Genre);
+                }
+            }
+            return categories;
+        }
+       
         //Get movies by category
         [HttpGet("SearchByGenre/{genre}")]
         public async Task<ActionResult<IEnumerable<Movie>>> SearchByGenre(string genre)
@@ -47,7 +62,7 @@ namespace MovieAPI.Controllers
             int index = random.Next(genreList.Count);
             return genreList[index];
         }
-
+       
         //Get random movie 
         [HttpGet("RandomMovie")]
         public async Task<ActionResult<String>> GetRandom()
@@ -67,7 +82,7 @@ namespace MovieAPI.Controllers
             int index = random.Next(title.Count);
             return title[index];
         }
-
+        
         [HttpGet("GetRandomByUserQuanity")]
         public async Task<ActionResult<IEnumerable<String>>> GetRandomByUserQuanity(int userAmount)
         {
@@ -80,10 +95,9 @@ namespace MovieAPI.Controllers
                 int index = random.Next(movies.Count);
                 randomMovies.Add(movies[index].Title);
             }
-
             return randomMovies;
         }
-
+        
         //GET: api/Movies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
@@ -97,7 +111,6 @@ namespace MovieAPI.Controllers
 
             return movie;
         }
-
 
         // PUT: api/Movies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
